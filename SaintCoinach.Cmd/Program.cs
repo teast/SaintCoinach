@@ -6,8 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Tharga.Toolkit.Console;
-using Tharga.Toolkit.Console.Command;
-using Tharga.Toolkit.Console.Command.Base;
+using Tharga.Toolkit.Console.Commands;
+using Tharga.Toolkit.Console.Commands.Base;
+using Tharga.Toolkit.Console.Consoles;
 
 namespace SaintCoinach.Cmd {
     class ConsoleProgressReporter : IProgress<Ex.Relational.Update.UpdateProgress> {
@@ -22,7 +23,7 @@ namespace SaintCoinach.Cmd {
     }
     class Program {
         private static void Main(string[] args) {
-            var dataPath = Properties.Settings.Default.DataPath;
+            var dataPath = "TODO: DataPath";//Properties.Settings.Default.DataPath;
 
             if (args.Length > 0) {
                 dataPath = args[0];
@@ -43,7 +44,8 @@ namespace SaintCoinach.Cmd {
             
             if (!realm.IsCurrentVersion) {
                 Console.Write("Update is available, perform update (Y/n)? ");
-                var updateQuery = Console.ReadLine();
+                //var updateQuery = Console.ReadLine();
+                var updateQuery = "n";
                 if (string.IsNullOrEmpty(updateQuery) || string.Equals("y", updateQuery, StringComparison.OrdinalIgnoreCase)) {
                     var stopWatch = new System.Diagnostics.Stopwatch();
                     stopWatch.Start();
@@ -54,12 +56,21 @@ namespace SaintCoinach.Cmd {
                     Console.WriteLine("Skipping update");
             }
 
-            var cns = new Tharga.Toolkit.Console.Command.Base.ClientConsole();
+            // TODO: Original
+            //var cns = new Tharga.Toolkit.Console.Command.Base.ClientConsole();
+            // TODO: Me running command directly for testing
+            var exd = new Commands.AllExdCommand(realm);
+            exd.WriteEvent += (s, e) => {
+                Console.WriteLine($"{e.OutputLevel.ToString()}: {e.Message}");
+            };
+
+            exd.Invoke(null);
+
+            var cns = new ClientConsole();
             var cmd = new RootCommand(cns);
 
             Setup(cmd, realm);
-
-            (new CommandEngine(cmd)).Run(args);
+            (new CommandEngine(cmd)).Start(args);
         }
 
         static void Setup(RootCommand rootCmd, ARealmReversed realm) {

@@ -146,9 +146,10 @@ namespace SaintCoinach.Xiv {
             : base(packCollection) {
 
             if (libraDatabase != null && libraDatabase.Exists) {
-                const string LibraConnectionStringFormat = @"metadata=res://*/Libra.LibraModel.csdl|res://*/Libra.LibraModel.ssdl|res://*/Libra.LibraModel.msl;provider=System.Data.SQLite.EF6;provider connection string='data source=""{0}""'";
-                var connStr = string.Format(LibraConnectionStringFormat, libraDatabase.FullName);
-                _Libra = new Libra.Entities(connStr);
+                // TODO: const string LibraConnectionStringFormat = @"metadata=res://*/Libra.LibraModel.csdl|res://*/Libra.LibraModel.ssdl|res://*/Libra.LibraModel.msl;provider=System.Data.SQLite.EF6;provider connection string='data source=""{0}""'";
+                // var connStr = string.Format(LibraConnectionStringFormat, libraDatabase.FullName);
+                // _Libra = new Libra.Entities(connStr);
+                _Libra = new Libra.Entities("");
             }
         }
 

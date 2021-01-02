@@ -8,6 +8,7 @@ using SaintCoinach.IO;
 
 using File = SaintCoinach.IO.File;
 using System.Collections.Concurrent;
+using System.Globalization;
 
 namespace SaintCoinach.Ex {
     public class ExCollection {
@@ -64,8 +65,17 @@ namespace SaintCoinach.Ex {
                         if (split.Length != 2)
                             continue;
 
+// TODO: Had problem handling negative numbers.
+// I'm not sure if it is due to .net core's int.Parse or
+// if it is another different from .net core that makes 
+// this numbers negative.. keeping this for the moment
+var format = new NumberFormatInfo();
+format.NegativeSign = "-";
+format.NumberNegativePattern = 1;
+format.NumberDecimalSeparator = ".";
+
                         var name = split[0];
-                        var id = int.Parse(split[1]);
+                        var id = int.Parse(split[1], System.Globalization.NumberStyles.AllowLeadingSign, format);
 
                         available.Add(name);
                         if (id >= 0)

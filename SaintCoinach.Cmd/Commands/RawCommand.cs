@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Tharga.Toolkit.Console;
-using Tharga.Toolkit.Console.Command;
-using Tharga.Toolkit.Console.Command.Base;
+using Tharga.Toolkit.Console.Commands;
+using Tharga.Toolkit.Console.Commands.Base;
 
 #pragma warning disable CS1998
 
@@ -20,11 +20,11 @@ namespace SaintCoinach.Cmd.Commands {
             _Realm = realm;
         }
 
-        public override async Task<bool> InvokeAsync(string paramList) {
-            if (paramList == null)
-                return false;
+        public override void Invoke(string[] param) {
+            if (param == null || param.Length == 0)
+                return;
             try {
-                if (_Realm.Packs.TryGetFile(paramList.Trim(), out var file)) {
+                if (_Realm.Packs.TryGetFile(string.Join(" ", param), out var file)) {
                     var target = new FileInfo(Path.Combine(_Realm.GameVersion, file.Path));
                     if (!target.Directory.Exists)
                         target.Directory.Create();
@@ -32,12 +32,10 @@ namespace SaintCoinach.Cmd.Commands {
                     var data = file.GetData();
                     File.WriteAllBytes(target.FullName, data);
                 } else
-                    OutputError("File not found.");
+                    OutputError(string.Format("File not found."));
             } catch (Exception e) {
                 OutputError(e.Message);
             }
-
-            return true;
         }
     }
 }

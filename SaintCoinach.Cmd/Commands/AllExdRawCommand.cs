@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Tharga.Toolkit.Console.Command.Base;
+using Tharga.Toolkit.Console.Commands.Base;
 
 using SaintCoinach.Ex;
 
@@ -32,23 +32,25 @@ namespace SaintCoinach.Cmd.Commands
         /// </summary>
         /// <param name="paramList"></param>
         /// <returns></returns>
-        public override async Task<bool> InvokeAsync(string paramList)
+        public override void Invoke(string[] param)
         {
             var versionPath = _Realm.GameVersion;
-            if (paramList?.Contains("/UseDefinitionVersion") ?? false)
+            if (param?.Any(_ => _ == "/UseDefinitionVersion") ?? false)
                 versionPath = _Realm.DefinitionVersion;
 
-            AssignVariables(this, paramList);
+            // TODO correct way to do this now?
+            param?.ToList().ForEach(_ => AssignVariables(this, _));
+            //old: AssignVariables(this, paramList);
 
             const string CsvFileFormat = "raw-exd-all/{0}{1}.csv";
 
             IEnumerable<string> filesToExport;
 
             // Gather files to export, may be split by params.
-            if (string.IsNullOrWhiteSpace(paramList))
+            if (param == null || param.Length == 0)
                 filesToExport = _Realm.GameData.AvailableSheets;
             else
-                filesToExport = paramList.Split(' ').Select(_ => _Realm.GameData.FixName(_));
+                filesToExport = param.Select(_ => _Realm.GameData.FixName(_));
 
             // Action counts
             var successCount = 0;
@@ -77,21 +79,19 @@ namespace SaintCoinach.Cmd.Commands
                             target.Directory.Create();
 
                         // Save
-                        OutputInformation("[{0}/{1}] Processing: {2} - Language: {3}", currentCount, total, name, lang.GetSuffix());
+                        OutputInformation(string.Format("[{0}/{1}] Processing: {2} - Language: {3}", currentCount, total, name, lang.GetSuffix()));
                         ExdHelper.SaveAsCsv(sheet, lang, target.FullName, true);
                         ++successCount;
                     }
                     catch (Exception e)
                     {
-                        OutputError("Export of {0} failed: {1}", name, e.Message);
+                        OutputError(string.Format("Export of {0} failed: {1}", name, e.Message));
                         try { if (target.Exists) { target.Delete(); } } catch { }
                         ++failCount;
                     }
                 }
             }
-            OutputInformation("{0} files exported, {1} failed", successCount, failCount);
-
-            return true;
+            OutputInformation(string.Format("{0} files exported, {1} failed", successCount, failCount));
         }
     }
 }

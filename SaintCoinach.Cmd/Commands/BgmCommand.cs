@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Tharga.Toolkit.Console;
-using Tharga.Toolkit.Console.Command;
-using Tharga.Toolkit.Console.Command.Base;
+using Tharga.Toolkit.Console.Commands;
+using Tharga.Toolkit.Console.Commands.Base;
 
 #pragma warning disable CS1998
 
@@ -19,7 +19,7 @@ namespace SaintCoinach.Cmd.Commands {
             _Realm = realm;
         }
 
-        public override async Task<bool> InvokeAsync(string paramList) {
+        public override void Invoke(string[] param) {
             var bgms = _Realm.GameData.GetSheet("BGM");
 
             var successCount = 0;
@@ -35,11 +35,11 @@ namespace SaintCoinach.Cmd.Commands {
                     if (ExportFile(filePath, null)) {
                         ++successCount;
                     } else {
-                        OutputError("File {0} not found.", filePath);
+                        OutputError(string.Format("File {0} not found.", filePath));
                         ++failCount;
                     }
                 } catch(Exception e) {
-                    OutputError("Export of {0} failed: {1}", filePath, e.Message);
+                    OutputError(string.Format("Export of {0} failed: {1}", filePath, e.Message));
                     ++failCount;
                 }
             }
@@ -58,19 +58,17 @@ namespace SaintCoinach.Cmd.Commands {
                     if (ExportFile(filePath, name)) {
                         ++successCount;
                     } else {
-                        OutputError("File {0} not found.", filePath);
+                        OutputError(string.Format("File {0} not found.", filePath));
                         ++failCount;
                     }
                 }
                 catch (Exception e) {
-                    OutputError("Export of {0} failed: {1}", filePath, e.Message);
+                    OutputError(string.Format("Export of {0} failed: {1}", filePath, e.Message));
                     ++failCount;
                 }
             }
 
-            OutputInformation("{0} files exported, {1} failed", successCount, failCount);
-
-            return true;
+            OutputInformation(string.Format("{0} files exported, {1} failed", successCount, failCount));
         }
 
         private bool ExportFile(string filePath, string suffix) {

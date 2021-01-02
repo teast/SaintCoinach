@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace SaintCoinach.Libra {
     public partial class Entities {
-        public Entities(string connectionString) : base(connectionString) { }
+        public Entities(string connectionString) : base() { }
     }
 }

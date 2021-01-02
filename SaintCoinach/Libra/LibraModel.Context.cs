@@ -9,20 +9,13 @@
 
 namespace SaintCoinach.Libra
 {
-    using System;
-    using System.Data.Entity;
-    using System.Data.Entity.Infrastructure;
+    using Microsoft.EntityFrameworkCore;
     
     public partial class Entities : DbContext
     {
-        public Entities()
-            : base("name=Entities")
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-        }
-    
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            throw new UnintentionalCodeFirstException();
+            //optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["BloggingDatabase"].ConnectionString);
         }
     
         public virtual DbSet<Achievement> Achievements { get; set; }

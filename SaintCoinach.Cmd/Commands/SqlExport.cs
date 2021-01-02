@@ -7,9 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SaintCoinach.Xiv;
-using Tharga.Toolkit.Console.Command.Base;
+using Tharga.Toolkit.Console.Commands.Base;
 using System.Reflection;
-using System.Windows.Forms;
 using SaintCoinach.Ex;
 using SaintCoinach.Ex.Relational;
 
@@ -174,7 +173,7 @@ namespace SaintCoinach.Cmd.Commands
                 WriteVairant2Rows(sheet, sb);
         }
 
-        public override async Task<bool> InvokeAsync(string paramList)
+        public override void Invoke(string[] param)
         {
             var imports = new List<string>();
             
@@ -234,8 +233,6 @@ namespace SaintCoinach.Cmd.Commands
             }
             
             File.WriteAllText("schema.sql", string.Join(Environment.NewLine, imports));
-
-            return true;
         }
     }
 }

@@ -6,8 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Tharga.Toolkit.Console;
-using Tharga.Toolkit.Console.Command;
-using Tharga.Toolkit.Console.Command.Base;
+using Tharga.Toolkit.Console.Commands;
+using Tharga.Toolkit.Console.Commands.Base;
 
 #pragma warning disable CS1998
 
@@ -30,33 +30,33 @@ namespace SaintCoinach.Cmd.Commands {
             _Realm = realm;
         }
 
-        public override async Task<bool> InvokeAsync(string paramList) {
+        public override void Invoke(string[] param) {
             var min = 0;
             var max = 999999;
 
-            if (!string.IsNullOrWhiteSpace(paramList)) {
-                var splitParam = paramList.Split(' ');
+            if (param?.Length > 0) {
+                var splitParam = param;
 
                 if (splitParam.Length == 1) {
                     if (int.TryParse(splitParam[0], out var parsed))
                         min = max = parsed;
                     else {
-                        OutputError("Failed to parse parameters.");
-                        return false;
+                        OutputError(string.Format("Failed to parse parameters."));
+                        return;
                     }
                 } else if (splitParam.Length == 2) {
                     if (!int.TryParse(splitParam[0], out min) || !int.TryParse(splitParam[1], out max)) {
-                        OutputError("Failed to parse parameters.");
-                        return false;
+                        OutputError(string.Format("Failed to parse parameters."));
+                        return;
                     }
 
                     if (max < min) {
-                        OutputError("Invalid parameters.");
-                        return false;
+                        OutputError(string.Format("Invalid parameters."));
+                        return;
                     }
                 } else {
-                    OutputError("Failed to parse parameters.");
-                    return false;
+                    OutputError(string.Format("Failed to parse parameters."));
+                    return;
                 }
             }
 
@@ -65,12 +65,12 @@ namespace SaintCoinach.Cmd.Commands {
                 try {
                     count += Process(i);
                 } catch (Exception e) {
-                    OutputError("{0:D6}: {1}", i, e.Message);
+                    OutputError(string.Format("{0:D6}: {1}", i, e.Message));
                 }
             }
-            OutputInformation("{0} images processed", count);
+            OutputInformation(string.Format("{0} images processed", count));
 
-            return true;
+            return;
         }
 
         private int Process(int i) {
@@ -96,7 +96,7 @@ namespace SaintCoinach.Cmd.Commands {
 
                     return true;
                 } else {
-                    OutputError("{0} is not an image.", filePath);
+                    OutputError(string.Format("{0} is not an image.", filePath));
                 }
             }
             return false;

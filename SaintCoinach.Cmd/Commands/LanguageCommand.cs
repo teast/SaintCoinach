@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Tharga.Toolkit.Console;
-using Tharga.Toolkit.Console.Command;
-using Tharga.Toolkit.Console.Command.Base;
+using Tharga.Toolkit.Console.Commands;
+using Tharga.Toolkit.Console.Commands.Base;
 
 #pragma warning disable CS1998
 
@@ -21,21 +21,19 @@ namespace SaintCoinach.Cmd.Commands {
             _Realm = realm;
         }
 
-        public override async Task<bool> InvokeAsync(string paramList) {
-            if (string.IsNullOrWhiteSpace(paramList)) {
-                OutputInformation("Current language: {0}", _Realm.GameData.ActiveLanguage);
-                return true;
+        public override void Invoke(string[] param) {
+            if (param == null || param.Length == 0) {
+                OutputInformation(string.Format("Current language: {0}", _Realm.GameData.ActiveLanguage));
+                return;
             }
-            paramList = paramList.Trim();
+            var paramList = string.Join(" ", param).Trim();
             if (!Enum.TryParse<Language>(paramList, out var newLang)) {
                 newLang = LanguageExtensions.GetFromCode(paramList);
                 if (newLang == Language.Unsupported) {
-                    OutputError("Unknown language.");
-                    return false;
+                    OutputError(string.Format("Unknown language."));
                 }
             }
             _Realm.GameData.ActiveLanguage = newLang;
-            return true;
         }
     }
 }
