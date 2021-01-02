@@ -3,7 +3,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Tharga.Toolkit.Console.Command.Base;
+using Tharga.Toolkit.Console;
+using Tharga.Toolkit.Console.Commands;
+using Tharga.Toolkit.Console.Commands.Base;
 
 using SaintCoinach.Xiv;
 using SaintCoinach.Cmd.Commands;
@@ -26,9 +28,9 @@ namespace SaintCoinach.Cmd.Commands {
         /// <summary>
         /// Loads all furniture and yard information in order to export them.
         /// </summary>
-        /// <param name="paramList">List of parameters being used in this function</param>
+        /// <param name="param">List of parameters being used in this function</param>
         /// <return name="result">A boolean indicating if the process failed or not.</return>
-        public override async Task<bool> InvokeAsync(string paramList) {
+        public override void Invoke(string[] param) {
             var indoor = _Realm.GameData.GetSheet("HousingFurniture");
             var outdoor = _Realm.GameData.GetSheet("HousingYardObject");
             _AllFurniture = indoor.Cast<HousingItem>().Concat(outdoor.Cast<HousingItem>()).Where(_ => _.Item != null && _.Item.Key != 0 && _.Item.Name.ToString().Length > 0).OrderBy(_ => _.Item.Name).ToArray();
@@ -47,20 +49,18 @@ namespace SaintCoinach.Cmd.Commands {
                         ++successCount;
                     }
                     else {
-                        OutputError("File {0} not found.", filePath);
+                        OutputError(string.Format("File {0} not found.", filePath));
                         ++failCount;
                     }
                 }
                 catch (Exception e) {
-                    OutputError("Export of {0} failed: {1}", filePath, e.Message);
+                    OutputError(string.Format("Export of {0} failed: {1}", filePath, e.Message));
                     ++failCount;
                 }
             }
 
 
-            OutputInformation("{0} files exported, {1} failed", successCount, failCount);
-
-            return true;
+            OutputInformation(string.Format("{0} files exported, {1} failed", successCount, failCount));
         }
 
         /// <summary>
