@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotSquish", "DotSquish\DotSquish.csproj", "{38E7CDFF-F974-4CC1-9713-64D7354C0956}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30611.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaintCoinach", "SaintCoinach\SaintCoinach.csproj", "{8A7D65EB-3DE3-4631-B286-CC73A3126002}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaintCoinach", "SaintCoinach\SaintCoinach.csproj", "{15E8B4C2-C844-43BE-AEAC-953ED359B29E}"
 EndProject
@@ -58,5 +62,8 @@ Global
 		{C41EAD32-0E4A-477E-BE7B-14C4F1C47EB1}.Release|x64.Build.0 = Release|Any CPU
 		{C41EAD32-0E4A-477E-BE7B-14C4F1C47EB1}.Release|x86.ActiveCfg = Release|Any CPU
 		{C41EAD32-0E4A-477E-BE7B-14C4F1C47EB1}.Release|x86.Build.0 = Release|Any CPU
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {38B9D19B-5177-445E-8E3F-6C69A809DAB9}
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.6.0.1304.0\lib\NET45
 	EndGlobalSection
 EndGlobal
